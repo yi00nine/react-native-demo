@@ -6,113 +6,95 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
+  TouchableHighlight,
 } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Util from './src/utils';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Day1 from './src/day1';
+const Stack = createNativeStackNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const GridPage = ({navigation}) => {
+  const boxs = [...Array(30)].map((_, index) => (
+    <TouchableHighlight
+      key={index}
+      style={styles.touchBox}
+      underlayColor="#eee"
+      onPress={() => navigation.navigate('Day1')}>
+      <View style={styles.boxContainer}>
+        <Text style={styles.boxText}>Day{index + 1}</Text>
+      </View>
+    </TouchableHighlight>
+  ));
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.touchBoxContainer}>{boxs}</View>
+    </ScrollView>
   );
-}
+};
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="首页"
+          component={GridPage}
+          options={{
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen name="Day1" component={Day1} options={{title: 'Day1'}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    // marginTop: 63,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  touchBoxContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: Util.size.width,
+    borderTopWidth: Util.pixel,
+    borderTopColor: '#ccc',
+    borderLeftWidth: Util.pixel,
+    borderLeftColor: '#ccc',
+    borderRightWidth: Util.pixel,
+    borderRightColor: '#ccc',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  touchBox: {
+    width: Util.size.width / 3 - 0.33334,
+    height: Util.size.width / 3,
+    backgroundColor: '#fff',
+    borderBottomWidth: Util.pixel,
+    borderBottomColor: '#ccc',
+    borderRightWidth: Util.pixel,
+    borderRightColor: '#ccc',
+    borderLeftWidth: Util.pixel,
+    borderLeftColor: '#ccc',
   },
-  highlight: {
-    fontWeight: '700',
+  boxContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: Util.size.width / 3,
+    height: Util.size.width / 3,
+  },
+  boxText: {
+    position: 'absolute',
+    bottom: 45,
+    width: Util.size.width / 3,
+    textAlign: 'center',
+    left: 0,
+    backgroundColor: 'transparent',
   },
 });
-
 export default App;
