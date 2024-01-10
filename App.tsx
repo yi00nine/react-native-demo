@@ -17,7 +17,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Util from './src/utils';
 
-import Day1 from './src/day1';
+import {HomePage, Result} from './src/day1';
 const Stack = createNativeStackNavigator();
 
 const GridPage = ({navigation}) => {
@@ -26,7 +26,7 @@ const GridPage = ({navigation}) => {
       key={index}
       style={styles.touchBox}
       underlayColor="#eee"
-      onPress={() => navigation.navigate('Day1')}>
+      onPress={() => navigation.navigate('Day' + (index + 1))}>
       <View style={styles.boxContainer}>
         <Text style={styles.boxText}>Day{index + 1}</Text>
       </View>
@@ -38,7 +38,14 @@ const GridPage = ({navigation}) => {
     </ScrollView>
   );
 };
-
+const Day1 = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Day1" component={HomePage} />
+      <Stack.Screen name="Result" component={Result} />
+    </Stack.Navigator>
+  );
+};
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
@@ -50,7 +57,11 @@ function App(): React.JSX.Element {
             headerTitleAlign: 'center',
           }}
         />
-        <Stack.Screen name="Day1" component={Day1} options={{title: 'Day1'}} />
+        <Stack.Screen
+          name="Day1"
+          component={Day1}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
